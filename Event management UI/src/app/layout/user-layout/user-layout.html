@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-uppercase" routerLink="/user-panel/dashboard">
+      EMS Portal
+    </a>
+    
+    <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#userNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="userNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/user-panel/dashboard" routerLinkActive="active">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/user-panel/my-bookings" routerLinkActive="active">My Bookings</a>
+        </li>
+        <li class="nav-item border-start border-secondary opacity-50 d-none d-lg-block mx-2" style="height: 20px; align-self: center;"></li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/user-panel/catalog/venues" routerLinkActive="active">Venues</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/user-panel/catalog/catering" routerLinkActive="active">Catering</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/user-panel/catalog/requirements" routerLinkActive="active">Requirements</a>
+        </li>
+      </ul>
+      
+      <div class="d-flex align-items-center">
+        <span class="text-white me-3 d-none d-lg-block small">Logged in as: <strong>{{ userEmail }}</strong></span>
+        <button class="btn btn-danger btn-sm fw-bold px-3" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="user-content-wrapper bg-light py-4" style="min-height: calc(100vh - 56px);">
+  <router-outlet></router-outlet>
+</div>

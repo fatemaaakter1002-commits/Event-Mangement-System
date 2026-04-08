@@ -1,0 +1,71 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Venue Management</h3>
+    <a routerLink="/venues/create" class="btn btn-success">+ Create Venue</a>
+  </div>
+
+  <!-- SEARCH & FILTER -->
+  <div class="card shadow p-3 mb-4">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <input class="form-control"
+               placeholder="Search by venue name..."
+               [(ngModel)]="searchText"
+               (input)="filterVenues()">
+      </div>
+      <div class="col-md-6">
+        <!-- ✅ Filter options match getStatusLabel() -->
+        <select class="form-select"
+                [(ngModel)]="statusFilter"
+                (change)="filterVenues()">
+          <option value="">All Status</option>
+          <option>Available</option>
+          <option>Not Available</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="card shadow">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>City</th>
+          <th>Capacity</th>
+          <th>Price / Day</th>
+          <th>Status</th>
+          <th width="180">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let venue of filteredVenues()">
+          <td>{{ venue.name }}</td>
+          <td>{{ venue.location }}</td>
+          <td>{{ venue.capacity }}</td>
+          <td>৳ {{ venue.price }}</td>
+          <td>
+            <!-- ✅ Boolean to label -->
+            <span class="badge"
+                  [ngClass]="{
+                    'bg-success': getStatusLabel(venue.status) === 'Available',
+                    'bg-danger':  getStatusLabel(venue.status) === 'Not Available'
+                  }">
+              {{ getStatusLabel(venue.status) }}
+            </span>
+          </td>
+          <td>
+            <a [routerLink]="['/venues/edit', venue.id]"
+               class="btn btn-warning btn-sm me-1">Edit</a>
+            <button class="btn btn-sm btn-danger"
+                    (click)="deleteVenue(venue)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredVenues().length === 0">
+          <td colspan="6" class="text-center p-3 text-muted">No venues found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+/* Dashboard Container Styling */
+.dashboard-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Stat Cards */
+.stat-card {
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background: #ffffff;
+    
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+    }
+}
+
+.icon-box {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+/* Soft Color Palette */
+.bg-soft-primary { background-color: rgba(13, 110, 253, 0.1); }
+.bg-soft-success { background-color: rgba(25, 135, 84, 0.1); }
+.bg-soft-warning { background-color: rgba(255, 193, 7, 0.1); }
+.bg-soft-info    { background-color: rgba(13, 202, 240, 0.1); }
+
+/* Typography */
+.ls-1 { letter-spacing: 1px; }
+
+/* Premium Gradients */
+.premium-gradient {
+    background: linear-gradient(135deg, #0d6efd 0%, #00d2ff 100%) !important;
+}
+
+/* Buttons and Interaction */
+.h-scale {
+    transition: all 0.2s ease;
+    &:hover {
+        transform: scale(1.02);
+        opacity: 0.95;
+    }
+}
+
+/* Table Styling */
+.table thead th {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+    color: #6c757d;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.table tbody tr td {
+    padding: 1rem 0.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Gold Gradient Text for high-value metrics */
+.gold-gradient-text {
+    h3 {
+        background: linear-gradient(to right, #d4af37, #f9d423);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+}

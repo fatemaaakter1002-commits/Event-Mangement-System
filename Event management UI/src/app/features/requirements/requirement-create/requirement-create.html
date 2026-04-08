@@ -1,0 +1,88 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between mb-4">
+    <h3>Add Requirement</h3>
+    <a routerLink="/requirements" class="btn btn-outline-secondary">
+      ← Back
+    </a>
+  </div>
+
+  <div class="card shadow p-4">
+
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label>Requirement Name *</label>
+        <input class="form-control"
+               [(ngModel)]="requirement.name">
+      </div>
+
+      <div class="col-md-6">
+        <label>Category *</label>
+        <select class="form-select"
+                [(ngModel)]="requirement.category">
+          <option value="">Select Category</option>
+              <option>Food</option>
+          <option>Decoration</option>
+          <option>Lighting</option>
+          <option>Sound</option>
+          <option>Stage</option>
+          <option>Security</option>
+          <option>Equipment</option>
+          <option>Photo</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label>Unit *</label>
+        <select class="form-select"
+                [(ngModel)]="requirement.unit">
+          <option value="">Select Unit</option>
+          <option>pcs</option>
+          <option>set</option>
+          <option>hour</option>
+          <option>day</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label>Default Cost</label>
+        <input type="number"
+               class="form-control"
+               [(ngModel)]="requirement.cost">
+      </div>
+
+      <div class="col-md-4">
+        <label>Status</label>
+        <select class="form-select"
+                [(ngModel)]="requirement.status">
+          <option>Active</option>
+          <option>Inactive</option>
+        </select>
+      </div>
+
+      <div class="col-md-12">
+        <label>Description</label>
+        <textarea class="form-control"
+                  rows="3"
+                  [(ngModel)]="requirement.description">
+        </textarea>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="errorMessage"
+       class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <div class="d-flex justify-content-end mt-4">
+    <button class="btn btn-success"
+            (click)="saveRequirement()">
+      Save Requirement
+    </button>
+  </div>
+
+</div>

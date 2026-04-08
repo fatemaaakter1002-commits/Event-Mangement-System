@@ -1,0 +1,140 @@
+<div class="container-fluid mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold text-dark mb-1">{{ supplier().id ? 'Update' : 'Register' }} Supplier</h3>
+      <p class="text-muted smaller mb-0">Record vendor details and contractual obligations.</p>
+    </div>
+    <a routerLink="/suppliers" class="ems-btn ems-btn-outline shadow-sm">
+      <i class="fas fa-arrow-left"></i> Back to Ledger
+    </a>
+  </div>
+
+  <div class="ems-card">
+    <div class="row g-2">
+      <!-- BASIC INFO -->
+      <div class="col-md-4 ems-form-group">
+        <label class="ems-form-label">Supplier Name *</label>
+        <input class="ems-form-input"
+               [ngModel]="supplier().name"
+               (ngModelChange)="updateField('name', $event)"
+               placeholder="Enter name">
+      </div>
+
+      <div class="col-md-4 ems-form-group">
+        <label class="ems-form-label">Supplier Type *</label>
+        <select class="ems-form-select"
+                [ngModel]="supplier().type"
+                (ngModelChange)="updateField('type', $event)">
+          <option value="">Select Category</option>
+          <option>Food / Catering</option>
+          <option>Decoration / Florist</option>
+          <option>Lighting & Sound</option>
+          <option>Furniture Rental</option>
+          <option>Equipment & Logistics</option>
+          <option>Photography / Media</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="col-md-4 ems-form-group">
+        <label class="ems-form-label">Phone Number *</label>
+        <input class="ems-form-input"
+               [ngModel]="supplier().phone"
+               (ngModelChange)="updateField('phone', $event)"
+               placeholder="+1234567890">
+      </div>
+
+      <div class="col-md-4 ems-form-group">
+        <label class="ems-form-label">Email Address</label>
+        <input class="ems-form-input"
+               [ngModel]="supplier().email"
+               (ngModelChange)="updateField('email', $event)"
+               placeholder="email@provider.com">
+      </div>
+
+      <div class="col-md-4 ems-form-group">
+        <label class="ems-form-label">Company Name</label>
+        <input class="ems-form-input"
+               [ngModel]="supplier().company"
+               (ngModelChange)="updateField('company', $event)"
+               placeholder="Full Company Title">
+      </div>
+
+      <div class="col-md-4 ems-form-group">
+        <label class="ems-form-label">Payment Terms</label>
+        <input class="ems-form-input"
+               placeholder="e.g. 50% Advance"
+               [ngModel]="supplier().paymentTerms"
+               (ngModelChange)="updateField('paymentTerms', $event)">
+      </div>
+
+      <!-- FINANCIAL INFO -->
+      <div class="col-md-3 ems-form-group">
+        <label class="ems-form-label">Contract Amount (৳)</label>
+        <input type="number" class="ems-form-input"
+               [ngModel]="supplier().contractAmount"
+               (ngModelChange)="updateField('contractAmount', $event); calculateDue()"
+               placeholder="0.00">
+      </div>
+
+      <div class="col-md-3 ems-form-group">
+        <label class="ems-form-label">Paid amount (৳)</label>
+        <input type="number" class="ems-form-input"
+               [ngModel]="supplier().paidAmount"
+               (ngModelChange)="updateField('paidAmount', $event); calculateDue()"
+               placeholder="0.00">
+      </div>
+
+      <div class="col-md-3 ems-form-group">
+        <label class="ems-form-label">Pending Due (৳)</label>
+        <input type="number" class="ems-form-input bg-light"
+               [value]="supplier().dueAmount"
+               disabled>
+      </div>
+
+      <div class="col-md-3 ems-form-group">
+        <label class="ems-form-label">Supplier Status</label>
+        <select class="ems-form-select"
+                [ngModel]="supplier().status"
+                (ngModelChange)="updateField('status', $event)">
+          <option>Active</option>
+          <option>Inactive</option>
+          <option>Blacklisted</option>
+        </select>
+      </div>
+
+      <div class="col-md-12 ems-form-group">
+        <label class="ems-form-label">Office Address</label>
+        <input class="ems-form-input"
+                  [ngModel]="supplier().address"
+                  (ngModelChange)="updateField('address', $event)"
+                  placeholder="Complete physical address">
+      </div>
+      
+      <div class="col-md-12 mt-2">
+        <div class="d-flex align-items-center gap-2">
+          <span class="smaller fw-bold text-muted">CURRENT STANDING:</span>
+          <span class="badge-ems" 
+                [ngClass]="{
+                  'badge-success': supplier().paymentStatus === 'Paid',
+                  'badge-warning': supplier().paymentStatus === 'Partial',
+                  'badge-danger': supplier().paymentStatus === 'Unpaid'
+                }">
+            <i class="fas fa-money-bill-wave me-1"></i>
+            {{ supplier().paymentStatus || 'Unpaid' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage()" class="alert alert-danger mt-3 mb-0 smaller border-0">
+      <i class="fas fa-exclamation-triangle me-2"></i> {{ errorMessage() }}
+    </div>
+
+    <div class="d-flex justify-content-end mt-3 pt-3 border-top">
+      <button class="ems-btn ems-btn-primary px-5" (click)="saveSupplier()">
+        <i class="fas fa-save me-2"></i> {{ supplier().id ? 'Update Profile' : 'Register Supplier' }}
+      </button>
+    </div>
+  </div>
+</div>

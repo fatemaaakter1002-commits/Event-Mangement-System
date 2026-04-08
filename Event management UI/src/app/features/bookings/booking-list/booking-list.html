@@ -1,0 +1,113 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Booking Management</h3>
+    <a routerLink="/bookings/create" class="btn btn-success">+ Create Booking</a>
+  </div>
+
+  <!-- SUMMARY CARDS -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card shadow p-3 text-center">
+        <h6>Total Bookings</h6>
+        <h4>{{ bookings().length }}</h4>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow p-3 text-center">
+        <h6>Total Revenue</h6>
+        <h4>৳ {{ totalRevenue() }}</h4>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow p-3 text-center">
+        <h6>Pending Amount</h6>
+        <h4 class="text-danger">৳ {{ pendingAmount() }}</h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="mb-3">
+    <input class="form-control"
+           placeholder="Search by client..."
+           [ngModel]="searchText()"
+           (ngModelChange)="setSearch($event)">
+  </div>
+
+  <!-- FILTER BUTTONS -->
+  <div class="mb-4">
+    <button class="btn btn-outline-dark me-2"
+            [class.active]="statusFilter() === 'All'"
+            (click)="setStatus('All')">All</button>
+
+    <button class="btn btn-outline-success me-2"
+            [class.active]="statusFilter() === 'Confirmed'"
+            (click)="setStatus('Confirmed')">Confirmed</button>
+
+    <button class="btn btn-outline-warning me-2"
+            [class.active]="statusFilter() === 'Pending'"
+            (click)="setStatus('Pending')">Pending</button>
+  </div>
+
+  <!-- BOOKING CARDS -->
+  <div *ngFor="let b of filteredBookings()"
+       class="card shadow mb-4 border-start border-4"
+       [ngClass]="getStatusBorder(b.status)">
+    <div class="card-body">
+
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0">{{ b.clientName }}</h5>
+
+        <div class="d-flex gap-2 align-items-center">
+          <span class="badge" [ngClass]="getStatusBadgeClass(b.status)">
+            {{ b.status }}
+          </span>
+          <span class="badge bg-dark">#{{ b.id }}</span>
+        </div>
+      </div>
+
+      <p class="mb-1 mt-2"><strong>Event:</strong> {{ b.event }}</p>
+      <p class="mb-1"><strong>Venue:</strong> {{ b.venue }}</p>
+      <p class="mb-2"><strong>Date:</strong> {{ b.date }}</p>
+
+      <hr>
+
+      <div class="row mb-2">
+        <div class="col-md-4">
+          <strong>Total:</strong> ৳ {{ b.total }}
+        </div>
+        <div class="col-md-4 text-success">
+          <strong>Paid:</strong> ৳ {{ b.paid }}
+        </div>
+        <div class="col-md-4 text-danger">
+          <strong>Remaining:</strong> ৳ {{ b.remaining }}
+        </div>
+      </div>
+
+      <div class="progress mb-3" style="height: 8px;">
+        <div class="progress-bar bg-success"
+             [style.width.%]="getProgress(b)">
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <a [routerLink]="['/bookings/invoice', b.id]"
+           class="btn btn-sm btn-info">Invoice</a>
+
+        <a [routerLink]="['/bookings/edit', b.id]"
+           class="btn btn-sm btn-warning">Edit</a>
+
+        <button *ngIf="b.status === 'Pending'"
+                class="btn btn-sm btn-danger"
+                (click)="deleteBooking(b.id)">Delete</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div *ngIf="filteredBookings().length === 0"
+       class="text-center text-muted p-4">
+    No bookings found
+  </div>
+</div>

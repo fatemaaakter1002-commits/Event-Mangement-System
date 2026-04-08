@@ -1,0 +1,110 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Event Management</h4>
+    <a routerLink="/events/create" class="btn btn-success">+ Create Event</a>
+  </div>
+
+  <div class="card shadow p-3 mb-4">
+    <div class="row g-3">
+
+      <!-- ✅ Search -->
+      <div class="col-md-6">
+        <input class="form-control"
+               placeholder="Search by event title..."
+               [ngModel]="searchText()"
+               (ngModelChange)="searchText.set($event)">
+      </div>
+
+      <!-- ✅ Status Filter -->
+      <div class="col-md-6">
+        <select class="form-select"
+                [ngModel]="statusFilter()"
+                (ngModelChange)="statusFilter.set($event)">
+          <option value="">All Status</option>
+          <option>Planned</option>
+          <option>Confirmed</option>
+          <option>Ongoing</option>
+          <option>Completed</option>
+          <option>Cancelled</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card shadow">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>Title</th>
+          <th>Type</th>
+          <th>Date</th>
+          <th>Venue</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th width="200">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let event of filteredEvents()">
+          <td>{{ event.eventTitle }}</td>
+          <td>{{ event.eventType }}</td>
+          <td>{{ event.eventDate }}</td>
+          <td>{{ event.venue?.name || '-' }}</td>
+          <td>{{ event.startTime || '-' }}</td>
+          <td>{{ event.endTime || '-' }}</td>
+          <td>
+            <button class="btn btn-sm btn-info me-1" (click)="openDetails(event)">Details</button>
+            <a [routerLink]="['/events/edit', event.eventId]"
+               class="btn btn-sm btn-warning me-1">Edit</a>
+            <button class="btn btn-sm btn-danger"
+                    (click)="deleteEvent(event.eventId)">Delete</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="filteredEvents().length === 0">
+          <td colspan="7" class="text-center p-3 text-muted">
+            No events found
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Details Modal -->
+<div class="modal fade" id="eventDetailsModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Event Information: {{ selectedEvent?.eventTitle }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4" *ngIf="selectedEvent">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <p class="text-muted mb-1 text-uppercase smaller fw-bold">Basic Details</p>
+            <h6 class="mb-3">Type: <span class="bg-light px-2 rounded">{{ selectedEvent.eventType }}</span></h6>
+            <h6 class="mb-3">Date: {{ selectedEvent.eventDate }}</h6>
+            <h6>Time: {{ selectedEvent.startTime }} - {{ selectedEvent.endTime }}</h6>
+          </div>
+          <div class="col-md-6">
+            <p class="text-muted mb-1 text-uppercase smaller fw-bold">Venue Details</p>
+            <h6>Venue: {{ selectedEvent.venue?.name || 'N/A' }}</h6>
+            <p class="text-muted small">{{ selectedEvent.venue?.location }}</p>
+          </div>
+          <div class="col-12" *ngIf="selectedEvent.notes">
+            <hr>
+            <p class="text-muted mb-1 text-uppercase smaller fw-bold">Notes</p>
+            <div class="bg-light p-3 rounded small italic">
+              {{ selectedEvent.notes }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

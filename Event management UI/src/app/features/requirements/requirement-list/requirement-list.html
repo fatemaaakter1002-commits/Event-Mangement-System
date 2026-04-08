@@ -1,0 +1,82 @@
+<div class="container-fluid mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold text-dark mb-1">Requirement Master</h3>
+      <p class="text-muted smaller mb-0">Unified catalog for logistical requirements and service pricing.</p>
+    </div>
+    <a routerLink="/requirements/create" class="ems-btn ems-btn-primary shadow-sm">
+      <i class="fas fa-plus"></i> Add Requirement
+    </a>
+  </div>
+
+  <div class="ems-card py-2 mb-4">
+    <div class="position-relative">
+      <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted opacity-50"></i>
+      <input type="text" class="ems-form-input ps-5 border-0 shadow-none" 
+             placeholder="Filter requirements by name, category, or unit..." 
+             [value]="searchText()" (input)="setSearch($any($event.target).value)"
+             (keyup.enter)="setSearch($any($event.target).value)">
+    </div>
+  </div>
+
+  <div class="ems-table-container">
+    <!-- LOADING STATE -->
+    <div *ngIf="loading()" class="text-center py-5">
+      <div class="spinner-border text-primary mb-3" role="status"></div>
+      <p class="text-muted smaller fw-bold text-uppercase tracking-wider">Synchronizing requirement data...</p>
+    </div>
+
+    <!-- TABLE VIEW -->
+    <div class="table-responsive" *ngIf="!loading()">
+      <table class="ems-table" *ngIf="filteredRequirements().length > 0">
+        <thead>
+          <tr>
+            <th class="ps-4">Resource Name</th>
+            <th>Category</th>
+            <th>Standard Unit</th>
+            <th class="text-end">Base Cost</th>
+            <th class="text-center">Availability</th>
+            <th class="text-end pe-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of filteredRequirements()">
+            <td class="ps-4">
+              <div class="fw-bold text-dark">{{ r.name }}</div>
+            </td>
+            <td>
+              <span class="badge-ems badge-info">
+                {{ r.category }}
+              </span>
+            </td>
+            <td><span class="text-muted smaller fw-bold">{{ r.unit }}</span></td>
+            <td class="text-end fw-bold text-dark">৳ {{ r.cost | number }}</td>
+            <td class="text-center">
+              <span class="badge-ems" [ngClass]="r.status === 'Active' ? 'badge-success' : 'badge-danger'">
+                <i class="fas" [ngClass]="r.status === 'Active' ? 'fa-check-double' : 'fa-minus-circle'"></i>
+                {{ r.status }}
+              </span>
+            </td>
+            <td class="text-end pe-4">
+              <div class="d-flex justify-content-end gap-2">
+                <a [routerLink]="['/requirements/edit', r.requirementId]" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                  <i class="fas fa-edit me-1"></i> Edit
+                </a>
+                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" (click)="deleteRequirement(r.requirementId)">
+                  <i class="fas fa-trash-alt me-1"></i> Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading() && filteredRequirements().length === 0" class="text-center py-5 text-muted">
+      <i class="fas fa-tasks fa-3x mb-3 opacity-25"></i>
+      <p class="fw-bold">No results found for "{{ searchText() }}".</p>
+      <button class="ems-btn ems-btn-outline" (click)="setSearch('')">Clear Filter</button>
+    </div>
+  </div>
+</div>

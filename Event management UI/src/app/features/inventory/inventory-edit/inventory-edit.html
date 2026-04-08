@@ -1,0 +1,85 @@
+<!-- <div class="container mt-4">
+
+  <div class="d-flex justify-content-between mb-4">
+    <h3>Edit Inventory Item</h3>
+    <a routerLink="/inventory"
+       class="btn btn-outline-secondary">
+      ← Back
+    </a>
+  </div>
+
+  <div class="card shadow p-4">
+
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label>Item Name *</label>
+        <input class="form-control"
+               [(ngModel)]="item.name">
+      </div>
+
+      <div class="col-md-6">
+        <label>Category *</label>
+        <select class="form-select"
+                [(ngModel)]="item.category">
+          <option>Decoration</option>
+          <option>Food</option>
+          <option>Furniture</option>
+          <option>Lighting</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label>SKU *</label>
+        <input class="form-control"
+               [(ngModel)]="item.sku"
+               disabled>
+      </div>
+
+      <div class="col-md-6">
+        <label>Supplier</label>
+        <input class="form-control"
+               [(ngModel)]="item.supplier">
+      </div>
+
+      <div class="col-md-4">
+        <label>Quantity</label>
+        <input type="number"
+               class="form-control"
+               [(ngModel)]="item.quantity">
+      </div>
+
+      <div class="col-md-4">
+        <label>Unit</label>
+        <select class="form-select"
+                [(ngModel)]="item.unit">
+          <option>pcs</option>
+          <option>kg</option>
+          <option>box</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label>Reorder Level</label>
+        <input type="number"
+               class="form-control"
+               [(ngModel)]="item.reorderLevel">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="errorMessage"
+       class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <div class="text-end mt-4">
+    <button class="btn btn-success"
+            (click)="updateItem()">
+      Update Item
+    </button>
+  </div>
+
+</div> -->

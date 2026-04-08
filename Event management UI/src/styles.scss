@@ -1,0 +1,236 @@
+:root {
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --primary-light: #eef2ff;
+  --success: #10b981;
+  --success-dark: #059669;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --secondary: #64748b;
+  --bg-main: #f8fafc;
+  --bg-sidebar: #0f172a;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --white: #ffffff;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+body {
+  font-family: 'Outfit', 'Inter', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* EMS Layout Basics */
+.container-fluid {
+  max-width: 1600px;
+}
+
+/* EMS Cards */
+.ems-card {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ems-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* EMS Buttons */
+.ems-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+  gap: 0.5rem;
+}
+
+.ems-btn-primary {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.ems-btn-primary:hover {
+  background-color: var(--primary-dark);
+  color: var(--white);
+}
+
+.ems-btn-outline {
+  background-color: transparent;
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+.ems-btn-outline:hover {
+  background-color: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* EMS Table */
+.ems-table-container {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.ems-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ems-table th {
+  background: #f1f5f9;
+  padding: 1rem 1.25rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ems-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  font-size: 0.875rem;
+}
+
+.ems-table tr:last-child td {
+  border-bottom: none;
+}
+
+.ems-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* EMS Forms - COMPACTED */
+.ems-form-group {
+  margin-bottom: 1rem;
+}
+
+.ems-form-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.ems-form-input, .ems-form-select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  font-size: 0.875rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #fafafa;
+}
+
+.ems-form-input:focus, .ems-form-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  background-color: var(--white);
+}
+
+/* EMS Badges */
+.badge-ems {
+  padding: 0.35em 0.75em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.badge-success { background-color: #ecfdf5; color: #065f46; }
+.badge-danger { background-color: #fef2f2; color: #991b1b; }
+.badge-warning { background-color: #fffbeb; color: #92400e; }
+.badge-info { background-color: #eff6ff; color: #1e40af; }
+
+/* Custom helpers */
+.ls-1 { letter-spacing: 0.1em; }
+.smaller { font-size: 0.75rem; }
+.tracking-wider { letter-spacing: 0.05em; }
+
+/* Dashboard Card Specifics */
+.border-start-success { border-left: 4px solid var(--success) !important; }
+.border-start-danger { border-left: 4px solid var(--danger) !important; }
+.border-start-primary { border-left: 4px solid var(--primary) !important; }
+.border-start-warning { border-left: 4px solid var(--warning) !important; }
+
+/* Print Optimization */
+@media print {
+  /* Hide all UI elements */
+  .sidebar, header, .no-print, .logout-btn, .action-buttons {
+    display: none !important;
+  }
+
+  /* Reset layout constraints */
+  .layout {
+    display: block !important;
+    background: white !important;
+  }
+
+  .content {
+    margin-left: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    background: white !important;
+    min-height: auto !important;
+  }
+
+  .router-content {
+    padding: 0 !important;
+  }
+
+  .container, .container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Paper and Typography */
+  body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  @page {
+    size: auto;
+    margin: 10mm;
+  }
+
+  /* Invoice Card Reset */
+  .card, .invoice-card, .receipt-card {
+    box-shadow: none !important;
+    border: 1px solid #eee !important;
+    margin: 0 auto !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}

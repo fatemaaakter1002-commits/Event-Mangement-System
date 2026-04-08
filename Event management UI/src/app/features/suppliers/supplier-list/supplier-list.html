@@ -1,0 +1,79 @@
+<div class="container-fluid mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold text-dark mb-1">Supplier Management</h3>
+      <p class="text-muted small mb-0">Track vendors, contracts, and payment balances.</p>
+    </div>
+    <a routerLink="/suppliers/create" class="ems-btn ems-btn-primary shadow-sm">
+      <i class="fas fa-plus"></i> Add New Supplier
+    </a>
+  </div>
+
+  <div class="ems-table-container">
+    <!-- LOADING STATE -->
+    <div *ngIf="loading()" class="text-center py-5">
+      <div class="spinner-border text-primary mb-3" role="status"></div>
+      <p class="text-muted smaller fw-bold tracking-wider">Synchronizing supplier ledger...</p>
+    </div>
+
+    <!-- TABLE VIEW -->
+    <div class="table-responsive" *ngIf="!loading() && suppliers().length > 0">
+      <table class="ems-table">
+        <thead>
+          <tr>
+            <th class="ps-4">Supplier / Company</th>
+            <th>Type</th>
+            <th>Contact Detail</th>
+            <th class="text-end">Total Paid (৳)</th>
+            <th class="text-center">Status</th>
+            <th class="text-end pe-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of suppliers()">
+            <td class="ps-4">
+              <div class="fw-bold text-dark">{{ s.name }}</div>
+              <div class="smaller text-muted">{{ s.company || 'Private Vendor' }}</div>
+            </td>
+            <td><span class="badge-ems badge-info">{{ s.type }}</span></td>
+            <td>
+              <div class="smaller"><i class="fas fa-phone-alt me-1 opacity-50"></i> {{ s.phone }}</div>
+              <div class="smaller text-muted">{{ s.paymentTerms }}</div>
+            </td>
+            <td class="text-end text-success fw-bold">৳ {{ (s.paidAmount || 0) | number }}</td>
+            <td class="text-center">
+              <span class="badge-ems badge-success">
+                <i class="fas fa-check-circle me-1"></i> Paid
+              </span>
+            </td>
+            <td class="text-end pe-4">
+              <div class="d-flex justify-content-end gap-2">
+                <a [routerLink]="['/suppliers/edit', s.id]" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" (click)="deleteSupplier(s.id)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <!-- Footer totals -->
+        <tfoot class="bg-light fw-bold text-dark border-top">
+          <tr>
+            <td colspan="3" class="text-end ps-4 py-3">Total Paid Portfolio:</td>
+            <td class="text-end text-success py-3">৳ {{ totalPaid() | number }}</td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div *ngIf="!loading() && suppliers().length === 0" class="text-center py-5 text-muted">
+      <i class="fas fa-truck-loading fa-3x mb-3 opacity-25"></i>
+      <p class="fw-bold">No suppliers registered in the system.</p>
+      <a routerLink="/suppliers/create" class="ems-btn ems-btn-primary btn-sm">Add First Supplier</a>
+    </div>
+  </div>
+</div>

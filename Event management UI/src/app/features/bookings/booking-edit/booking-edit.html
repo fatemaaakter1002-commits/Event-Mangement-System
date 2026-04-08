@@ -1,0 +1,91 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between mb-4">
+    <h3>Edit Booking</h3>
+    <a routerLink="/bookings" class="btn btn-outline-secondary">
+      ← Back
+    </a>
+  </div>
+
+  <div class="card shadow p-4">
+
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label>Client Name *</label>
+        <input class="form-control"
+               [(ngModel)]="booking.clientName">
+      </div>
+
+      <div class="col-md-6">
+        <label>Event *</label>
+        <select class="form-select"
+                [(ngModel)]="booking.event">
+          <option *ngFor="let e of events">
+            {{ e.title }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label>Venue *</label>
+        <select class="form-select"
+                [(ngModel)]="booking.venue"
+                (change)="onVenueChange()">
+          <option *ngFor="let v of venues">
+            {{ v.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label>Date *</label>
+        <input type="date"
+               class="form-control"
+               [(ngModel)]="booking.date">
+      </div>
+
+      <div class="col-md-4">
+        <label>Guests</label>
+        <input type="number"
+               class="form-control"
+               [(ngModel)]="booking.guests"
+               (input)="calculateTotal()">
+      </div>
+
+      <div class="col-md-4">
+        <label>Advance Paid</label>
+        <input type="number"
+               class="form-control"
+               [(ngModel)]="booking.paid"
+               (input)="calculateRemaining()">
+      </div>
+
+      <div class="col-md-4">
+        <label>Status</label>
+        <select class="form-select"
+                [(ngModel)]="booking.status">
+          <option>Pending</option>
+          <option>Confirmed</option>
+          <option>Completed</option>
+          <option>Cancelled</option>
+        </select>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="errorMessage"
+       class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <div class="d-flex justify-content-end mt-4">
+    <button class="btn btn-success"
+            (click)="updateBooking()">
+      Update Booking
+    </button>
+  </div>
+
+</div>

@@ -1,0 +1,167 @@
+<!-- ✅ Loading -->
+<div *ngIf="loading()" class="text-center mt-5">
+  <div class="spinner-border text-primary"></div>
+</div>
+
+<!-- ✅ Main Content -->
+<div class="container mt-4" *ngIf="!loading() && purchase()">
+
+
+
+  <!-- BUTTONS -->
+  <div class="d-flex justify-content-between mb-3 no-print">
+    <button onclick="history.back()" class="btn btn-outline-secondary">
+      ← Back
+    </button>
+    <div class="d-flex gap-2">
+      <button class="btn btn-success" (click)="savePdf()">
+        💾 Save as PDF
+      </button>
+      <button class="btn btn-danger" (click)="print()">
+        🖨️ Print Invoice
+      </button>
+    </div>
+  </div>
+
+  <!-- INVOICE CARD -->
+  <div class="card shadow p-4 invoice-card" style="max-width: 650px; margin: auto;">
+
+    <!-- HEADER -->
+    <div class="text-center mb-3">
+      <h2 class="fw-bold text-primary">EMS Event Management</h2>
+      <p class="text-muted mb-0">Purchase Invoice</p>
+      <span class="badge bg-dark mt-1 fs-6">
+        {{ purchase()?.invoiceNumber }}
+      </span>
+    </div>
+
+    <hr>
+
+    <!-- SUPPLIER INFO -->
+    <h6 class="text-uppercase text-muted mb-2">Supplier Information</h6>
+    <table class="table table-borderless table-sm">
+      <tr>
+        <td width="45%"><strong>Supplier Name</strong></td>
+        <td>{{ purchase()?.supplier?.name }}</td>
+      </tr>
+      <tr>
+        <td><strong>Type</strong></td>
+        <td>{{ purchase()?.supplier?.type }}</td>
+      </tr>
+      <tr>
+        <td><strong>Phone</strong></td>
+        <td>{{ purchase()?.supplier?.phone }}</td>
+      </tr>
+      <tr *ngIf="purchase()?.supplier?.company">
+        <td><strong>Company</strong></td>
+        <td>{{ purchase()?.supplier?.company }}</td>
+      </tr>
+    </table>
+
+    <hr>
+
+    <!-- ITEM INFO -->
+    <h6 class="text-uppercase text-muted mb-2">Item Details</h6>
+    <table class="table table-bordered table-sm">
+      <thead class="table-light">
+        <tr>
+          <th>Item</th>
+          <th>Category</th>
+          <th class="text-center">Qty</th>
+          <th class="text-end">Unit Price</th>
+          <th class="text-end">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ purchase()?.itemName }}</td>
+          <td>{{ purchase()?.category }}</td>
+          <td class="text-center">{{ purchase()?.quantity }}</td>
+          <td class="text-end">৳ {{ purchase()?.unitPrice }}</td>
+          <td class="text-end fw-bold text-danger">৳ {{ purchase()?.totalAmount }}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="table-success">
+          <td colspan="4" class="text-end"><strong>Total Paid</strong></td>
+          <td class="text-end fw-bold fs-5 text-success">
+            ৳ {{ purchase()?.totalAmount }}
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <hr>
+
+    <!-- PAYMENT INFO -->
+    <h6 class="text-uppercase text-muted mb-2">Payment Details</h6>
+    <table class="table table-borderless table-sm">
+      <tr>
+        <td width="45%"><strong>Payment Method</strong></td>
+        <td>
+          <span class="badge bg-primary">{{ purchase()?.paymentMethod }}</span>
+        </td>
+      </tr>
+
+      <tr *ngIf="needsAccountNumber() && purchase()?.accountNumber">
+        <td>
+          <strong>
+            {{ purchase()?.paymentMethod === 'Bank Transfer'
+               ? 'Account Number'
+               : purchase()?.paymentMethod + ' Number' }}
+          </strong>
+        </td>
+        <td>{{ purchase()?.accountNumber }}</td>
+      </tr>
+
+      <tr *ngIf="needsBankName() && purchase()?.bankName">
+        <td><strong>Bank Name</strong></td>
+        <td>{{ purchase()?.bankName }}</td>
+      </tr>
+
+      <tr>
+        <td><strong>Purchase Date</strong></td>
+        <td>{{ purchase()?.purchaseDate }}</td>
+      </tr>
+
+      <tr>
+        <td><strong>Delivery Status</strong></td>
+        <td>
+          <span class="badge"
+                [ngClass]="{
+                  'bg-success': purchase()?.status === 'Received',
+                  'bg-warning text-dark': purchase()?.status === 'Pending',
+                  'bg-danger': purchase()?.status === 'Cancelled'
+                }">
+            {{ purchase()?.status }}
+          </span>
+        </td>
+      </tr>
+
+      <tr>
+        <td><strong>Payment Status</strong></td>
+        <td>
+          <span class="badge bg-success">
+            ✅ {{ purchase()?.paymentStatus }}
+          </span>
+        </td>
+      </tr>
+
+      <tr *ngIf="purchase()?.note">
+        <td><strong>Note</strong></td>
+        <td>{{ purchase()?.note }}</td>
+      </tr>
+    </table>
+
+    <!-- FOOTER -->
+    <div class="text-center mt-4 border-top pt-3">
+      <p class="text-muted mb-0">
+        This is an official purchase invoice from EMS Event Management
+      </p>
+      <small class="text-muted">
+        Generated on {{ today | date:'dd MMM yyyy, hh:mm a' }}
+      </small>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,117 @@
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar shadow">
+
+    <div class="logo-section p-4 mb-2">
+      <div class="d-flex align-items-center">
+        <div class="logo-icon bg-primary text-white rounded-3 p-2 me-2 shadow-sm">
+          <i class="fas fa-gem"></i>
+        </div>
+        <span class="h5 fw-bold m-0 text-white ls-1">EMS PRO</span>
+      </div>
+    </div>
+
+    <div class="sidebar-nav px-3">
+      <h6 class="text-secondary small fw-bold text-uppercase px-3 mb-3 opacity-50">Main Menu</h6>
+      
+      <ul class="nav flex-column gap-1">
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/dashboard" routerLinkActive="active">
+            <i class="fas fa-th-large me-3 opacity-75"></i> Overview
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/employees" routerLinkActive="active">
+            <i class="fas fa-id-card me-3 opacity-75"></i> Employees
+          </a>
+        </li>
+        
+        <li class="nav-section-title mt-4 mb-2">Resources</li>
+        
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/venues" routerLinkActive="active">
+            <i class="fas fa-map-marked-alt me-3 opacity-75"></i> Venues
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/events" routerLinkActive="active">
+            <i class="fas fa-star me-3 opacity-75"></i> Events
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/catering" routerLinkActive="active">
+            <i class="fas fa-utensils me-3 opacity-75"></i> Catering
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/requirements" routerLinkActive="active">
+            <i class="fas fa-tasks me-3 opacity-75"></i> Requirements
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/suppliers" routerLinkActive="active">
+            <i class="fas fa-truck me-3 opacity-75"></i> Suppliers
+          </a>
+        </li>
+        
+        <li class="nav-section-title mt-4 mb-2">Operations</li>
+        
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/bookings" routerLinkActive="active">
+            <i class="fas fa-calendar-check me-3 opacity-75"></i> Bookings
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/payments" routerLinkActive="active">
+            <i class="fas fa-wallet me-3 opacity-75"></i> Payments
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/purchases" routerLinkActive="active">
+            <i class="fas fa-shopping-cart me-3 opacity-75"></i> Purchases
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/inventory" routerLinkActive="active">
+            <i class="fas fa-boxes me-3 opacity-75"></i> Inventory
+          </a>
+        </li>
+
+        <li class="nav-section-title mt-4 mb-2">Reports & Analytics</li>
+        <li class="nav-item">
+          <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center" routerLink="/reports" routerLinkActive="active">
+            <i class="fas fa-chart-line me-3 opacity-75"></i> Analytics
+          </a>
+        </li>
+      </ul>
+
+      <div class="mt-5 pt-4 border-top border-secondary border-opacity-25">
+        <button class="nav-link text-danger w-100 text-start border-0 bg-transparent rounded-3 px-3 py-2 d-flex align-items-center logout-btn" (click)="logout()">
+          <i class="fas fa-power-off me-3"></i> Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <header class="bg-white border-bottom p-4 d-flex justify-content-between align-items-center sticky-top z-index-100">
+       <div class="search-bar position-relative d-none d-md-block">
+          <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted opacity-50"></i>
+          <input type="text" class="form-control border-0 bg-light rounded-pill ps-5 py-2" placeholder="Search system resources..." style="width: 300px;">
+       </div>
+       <div class="user-profile d-flex align-items-center">
+          <div class="text-end me-3 d-none d-sm-block">
+             <div class="fw-bold text-dark small">System Admin</div>
+             <div class="text-muted smaller">ems.admin@company.com</div>
+          </div>
+          <img src="https://ui-avatars.com/api/?name=Admin&background=4f46e5&color=fff" class="rounded-circle shadow-sm" style="width: 40px;">
+       </div>
+    </header>
+    <div class="router-content">
+       <router-outlet></router-outlet>
+    </div>
+  </div>
+
+</div>

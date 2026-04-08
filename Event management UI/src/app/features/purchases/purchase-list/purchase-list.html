@@ -1,0 +1,88 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Purchase List</h3>
+    <a routerLink="/purchases/create" class="btn btn-success">+ Add Purchase</a>
+  </div>
+
+  <!-- ✅ Loading -->
+  <div *ngIf="loading()" class="text-center mb-3">
+    Loading purchases...
+  </div>
+
+  <!-- ✅ Stats -->
+  <div class="row mb-4" *ngIf="!loading()">
+    <div class="col-md-4">
+      <div class="card shadow p-3 text-center">
+        <h6>Total Purchases</h6>
+        <h4>{{ purchases().length }}</h4>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card shadow p-3 text-center">
+        <h6>Total Spent</h6>
+        <h4 class="text-danger">৳ {{ totalSpent() }}</h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Table -->
+  <div class="card shadow" *ngIf="!loading()">
+    <table class="table table-hover mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Supplier</th>
+          <th>Item</th>
+          <th>Category</th>
+          <th>Qty</th>
+          <th>Unit Price</th>
+          <th>Total</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- ✅ signal -->
+        <tr *ngFor="let p of purchases()">
+          <td>{{ p.id }}</td>
+          <td><strong>{{ p.supplier?.name }}</strong></td>
+          <td>{{ p.itemName }}</td>
+          <td>{{ p.category }}</td>
+          <td>{{ p.quantity }}</td>
+          <td>৳ {{ p.unitPrice }}</td>
+          <td class="fw-bold text-danger">৳ {{ p.totalAmount }}</td>
+          <td>{{ p.purchaseDate }}</td>
+          <td>
+            <span class="badge"
+                  [ngClass]="{
+                    'bg-success': p.status === 'Received',
+                    'bg-warning text-dark': p.status === 'Pending',
+                    'bg-danger': p.status === 'Cancelled'
+                  }">
+              {{ p.status }}
+            </span>
+          </td>
+
+          <td>
+            <a [routerLink]="['/purchases/invoice', p.id]"
+               class="btn btn-sm btn-info me-1">Invoice</a>
+
+            <button class="btn btn-sm btn-danger"
+                    (click)="deletePurchase(p.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ✅ Empty State -->
+    <div *ngIf="purchases().length === 0"
+         class="text-center text-muted p-4">
+      No purchases found
+    </div>
+
+  </div>
+</div>

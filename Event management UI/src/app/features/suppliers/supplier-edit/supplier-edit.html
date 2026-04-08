@@ -1,0 +1,146 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Edit Supplier</h3>
+    <button class="btn btn-outline-secondary" routerLink="/suppliers">← Back</button>
+  </div>
+
+  <div class="card shadow-lg p-4">
+
+    <!-- BASIC INFO -->
+    <h5 class="text-primary mb-3">Basic Information</h5>
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Supplier Name *</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="supplier.name"
+               placeholder="Enter supplier name"
+               [class.is-invalid]="!supplier.name && submitted">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Supplier Type *</label>
+        <select class="form-select"
+                [(ngModel)]="supplier.type"
+                [class.is-invalid]="!supplier.type && submitted">
+          <option value="">Select Type</option>
+          <option>Food</option>
+          <option>Decoration</option>
+          <option>Sound</option>
+          <option>Lighting</option>
+          <option>Furniture</option>
+          <option>Equipment</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Phone *</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="supplier.phone"
+               placeholder="Enter phone number"
+               [class.is-invalid]="!supplier.phone && submitted">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control"
+               [(ngModel)]="supplier.email"
+               placeholder="Enter email">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Company</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="supplier.company"
+               placeholder="Enter company name">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Payment Terms</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="supplier.paymentTerms"
+               placeholder="Cash / 30 Days / 50% Advance">
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label">Address</label>
+        <textarea class="form-control" rows="2"
+                  [(ngModel)]="supplier.address"
+                  placeholder="Enter address"></textarea>
+      </div>
+
+    </div>
+
+    <hr class="my-4">
+
+    <!-- FINANCIAL INFO -->
+    <h5 class="text-primary mb-3">Financial Details</h5>
+    <div class="row g-3">
+
+      <div class="col-md-4">
+        <label class="form-label">Contract Amount</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="supplier.contractAmount"
+               (input)="calculateDue()">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Paid Amount</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="supplier.paidAmount"
+               (input)="calculateDue()">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Due Amount</label>
+        <input type="number" class="form-control"
+               [value]="supplier.dueAmount"
+               disabled>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Payment Status</label>
+        <div class="mt-1">
+          <!-- ✅ Auto-calculated badge instead of plain disabled input -->
+          <span class="badge fs-6"
+                [ngClass]="{
+                  'bg-success': supplier.paymentStatus === 'Paid',
+                  'bg-warning text-dark': supplier.paymentStatus === 'Partial',
+                  'bg-danger': supplier.paymentStatus === 'Unpaid'
+                }">
+            {{ supplier.paymentStatus }}
+          </span>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Supplier Status</label>
+        <select class="form-select" [(ngModel)]="supplier.status">
+          <option>Active</option>
+          <option>Inactive</option>
+          <option>Blacklisted</option>
+        </select>
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label">Notes</label>
+        <textarea class="form-control" rows="2"
+                  [(ngModel)]="supplier.notes"
+                  placeholder="Any additional notes"></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <div class="d-flex justify-content-end gap-3 mt-4">
+    <button class="btn btn-outline-secondary" routerLink="/suppliers">Cancel</button>
+    <button class="btn btn-success px-4" (click)="updateSupplier()">Update Supplier</button>
+  </div>
+
+</div>

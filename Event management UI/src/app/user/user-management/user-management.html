@@ -1,0 +1,184 @@
+<div class="user-container">
+
+  <!-- Header -->
+  <div class="header">
+
+    <div>
+      <h2>User Management</h2>
+      <p>Total Users: <strong>{{ filteredUsers.length }}</strong></p>
+    </div>
+
+    <div class="header-actions">
+
+      <input
+      type="text"
+      placeholder="Search username..."
+      [(ngModel)]="searchText"
+      (input)="search()"
+      class="search-input">
+
+    </div>
+
+  </div>
+
+
+  <!-- USER FORM -->
+
+  <div class="form-card">
+
+    <h3>{{ editId ? 'Edit User' : 'Create User' }}</h3>
+
+    <div class="form-grid">
+
+      <!-- Employee -->
+
+      <select [(ngModel)]="newUser.employeeId">
+
+        <option value="">Select Employee</option>
+
+        <option *ngFor="let emp of employees"
+        [value]="emp.id">
+
+        {{ emp.name }}
+
+        </option>
+
+      </select>
+
+
+      <!-- Username -->
+
+      <input
+      type="text"
+      placeholder="Username"
+      [(ngModel)]="newUser.username">
+
+
+      <!-- Password -->
+
+      <input
+      type="password"
+      placeholder="Password"
+      [(ngModel)]="newUser.password">
+
+
+      <!-- Role -->
+
+      <select [(ngModel)]="newUser.role">
+
+        <option value="">Select Role</option>
+        <option value="Admin">Admin</option>
+        <option value="Staff">Staff</option>
+
+      </select>
+
+
+      <!-- Status -->
+
+      <select [(ngModel)]="newUser.status">
+
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+
+      </select>
+
+    </div>
+
+
+    <button class="save-btn" (click)="saveUser()">
+
+      {{ editId ? 'Update User' : 'Create User' }}
+
+    </button>
+
+  </div>
+
+
+
+  <!-- USER TABLE -->
+
+  <div class="table-card">
+
+    <table *ngIf="filteredUsers.length > 0">
+
+      <thead>
+
+        <tr>
+
+          <th>#</th>
+       
+          <th>Username</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Actions</th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        <tr *ngFor="let user of filteredUsers; let i=index">
+
+          <td>{{ i+1 }}</td>
+
+   
+
+          <td>{{ user.username }}</td>
+
+          <td>{{ user.role }}</td>
+
+          <td>
+
+            <span
+            class="status"
+            [ngClass]="user.status === 'Active'
+            ? 'active-status'
+            : 'inactive-status'">
+
+            {{ user.status }}
+
+            </span>
+
+          </td>
+
+          <td>
+
+            <button
+            class="edit-btn"
+            (click)="editUser(user)">
+
+            Edit
+
+            </button>
+
+            <button
+            class="delete-btn"
+            (click)="deleteUser(user.id)">
+
+            Delete
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+
+    <!-- EMPTY STATE -->
+
+    <div *ngIf="filteredUsers.length === 0"
+    class="empty-state">
+
+      <h3>No users found</h3>
+
+    </div>
+
+  </div>
+
+</div>

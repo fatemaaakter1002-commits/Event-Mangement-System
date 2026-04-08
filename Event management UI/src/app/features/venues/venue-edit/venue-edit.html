@@ -1,0 +1,78 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="mb-0">Edit Venue</h3>
+      <div class="text-muted fw-bold">Current: {{ venue.name }}</div>
+    </div>
+    <a routerLink="/venues" class="btn btn-outline-secondary">
+      ← Back
+    </a>
+  </div>
+
+  <div class="card shadow p-4">
+
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label>Venue Name *</label>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="venue.name">
+      </div>
+
+      <div class="col-md-6">
+        <label>City *</label>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="venue.location">
+      </div>
+
+      <div class="col-md-4">
+        <label>Capacity *</label>
+        <input type="number"
+               class="form-control"
+               [(ngModel)]="venue.capacity">
+      </div>
+
+      <div class="col-md-6">
+        <label>Price Per Day *</label>
+        <input type="number"
+               class="form-control"
+               [(ngModel)]="venue.price">
+      </div>
+
+      <div class="col-md-6">
+        <label>Status</label>
+        <select class="form-select"
+                [(ngModel)]="venue.status">
+          <option [ngValue]="true">Available</option>
+          <option [ngValue]="false">Not Available</option>
+        </select>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ERROR -->
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <!-- BUTTON -->
+  <div class="d-flex justify-content-end gap-3 mt-4">
+
+    <a routerLink="/venues"
+       class="btn btn-outline-secondary">
+      Cancel
+    </a>
+
+    <button class="btn btn-success"
+            (click)="updateVenue()">
+      Update Venue
+    </button>
+
+  </div>
+
+</div>

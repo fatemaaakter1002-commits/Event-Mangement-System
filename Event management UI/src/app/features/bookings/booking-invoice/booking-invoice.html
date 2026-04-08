@@ -1,0 +1,173 @@
+<!-- Loading -->
+<div *ngIf="loading()" class="text-center mt-5">
+  <div class="spinner-border text-primary"></div>
+  <p class="mt-2">Loading invoice...</p>
+</div>
+
+<!-- Error -->
+<div *ngIf="error()" class="container mt-4">
+  <div class="alert alert-danger">{{ error() }}</div>
+  <button class="btn btn-outline-secondary" (click)="goBack()">← Back</button>
+</div>
+
+<!-- Invoice -->
+<div class="container mt-4" *ngIf="!loading() && booking() as booking">
+
+  <!-- ACTION BUTTONS -->
+  <div class="d-flex justify-content-between mb-3 no-print">
+    <button class="btn btn-outline-secondary" (click)="goBack()">← Back to Dashboard</button>
+    <button class="btn btn-danger shadow" (click)="savePDF()">
+      <i class="fas fa-file-pdf me-2"></i>Save as PDF / Print
+    </button>
+  </div>
+
+  <!-- INVOICE CARD -->
+  <div class="card shadow p-4" id="invoice-print-area">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-start mb-4">
+      <div>
+        <h2 class="fw-bold text-primary">EMS Event Management</h2>
+        <p class="text-muted mb-0">Professional Event Services</p>
+      </div>
+      <div class="text-end">
+        <h4 class="fw-bold">INVOICE</h4>
+        <p class="mb-0">#INV-{{ booking.id }}</p>
+        <p class="mb-0">Date: {{ booking.date | date:'mediumDate' }}</p>
+        <span class="badge mt-1"
+              [ngClass]="{
+                'bg-success': booking.paymentStatus === 'Paid',
+                'bg-warning text-dark': booking.paymentStatus === 'Partial',
+                'bg-danger': booking.paymentStatus === 'Pending'
+              }">
+          {{ booking.paymentStatus }}
+        </span>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- CLIENT INFO -->
+    <div class="row mb-4">
+      <div class="col-md-6 border-end">
+        <h6 class="text-muted small text-uppercase fw-bold">Bill To:</h6>
+        <h5 class="fw-bold mb-1">{{ booking.clientName }}</h5>
+        <div class="small text-muted mb-2">
+          <i class="fas fa-phone-alt me-1"></i> Booking ID: #INV-{{ booking.id }}
+        </div>
+        <p class="mb-1"><strong>Event:</strong> {{ booking.event }}</p>
+        <p class="mb-1"><strong>Venue:</strong> {{ booking.venue }}</p>
+        <p class="mb-1"><strong>Date:</strong> {{ booking.date | date:'mediumDate' }}</p>
+        <p class="mb-1"><strong>Time Window:</strong> {{ booking.startTime }} - {{ booking.endTime }}</p>
+        <p class="mb-1"><strong>Guests:</strong> {{ booking.guests }}</p>
+      </div>
+      <div class="col-md-6 ps-md-4">
+        <h6 class="text-muted small text-uppercase fw-bold">Payment Details:</h6>
+        <p class="mb-1"><strong>Status:</strong> <span class="badge rounded-pill bg-success-subtle text-success px-3">{{ booking.paymentStatus }}</span></p>
+        <p class="mb-1"><strong>Method:</strong> {{ booking.paymentMethod }}</p>
+        
+        <!-- Conditional Numbers -->
+        <p class="mb-1" *ngIf="booking.bkashNumber"><strong>bKash Number:</strong> {{ booking.bkashNumber }}</p>
+        <p class="mb-1" *ngIf="booking.nagadNumber"><strong>Nagad Number:</strong> {{ booking.nagadNumber }}</p>
+        <div *ngIf="booking.bankName">
+          <p class="mb-1"><strong>Bank:</strong> {{ booking.bankName }}</p>
+          <p class="mb-1"><strong>Acc:</strong> {{ booking.bankAccountNumber }}</p>
+        </div>
+        
+        <p class="mb-1 mt-2 text-primary"><strong>Booking From:</strong> {{ booking.bookingFromNumber }}</p>
+      </div>
+    </div>
+
+    <!-- COST TABLE -->
+    <h5 class="mb-3">Cost Breakdown</h5>
+    <table class="table table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th>Description</th>
+          <th class="text-end">Amount (৳)</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- Venue -->
+        <tr>
+          <td>Venue Cost</td>
+          <td class="text-end">{{ booking.venueCost || 0 }}</td>
+        </tr>
+
+        <!-- Catering -->
+        <tr *ngIf="getFoodItems().length > 0">
+          <td colspan="2" class="fw-bold bg-light">Catering Items</td>
+        </tr>
+        <tr *ngFor="let item of getFoodItems()">
+          <td class="ps-4">
+            {{ item.name }}
+            <small class="text-muted">
+              (৳{{ item.price }} × {{ booking.guests }} guests)
+            </small>
+          </td>
+          <td class="text-end">
+            {{ item.price * booking.guests }}
+          </td>
+        </tr>
+        <tr *ngIf="getFoodItems().length > 0">
+          <td class="fw-bold">Food Cost (Total)</td>
+          <td class="text-end fw-bold">{{ booking.foodCost || 0 }}</td>
+        </tr>
+
+        <!-- Requirements -->
+        <tr *ngIf="requirements().length > 0">
+          <td colspan="2" class="fw-bold bg-light">Requirements</td>
+        </tr>
+        <tr *ngFor="let r of requirements()">
+          <td class="ps-4">
+            {{ r.name }} <small class="text-muted">({{ r.unit }})</small>
+          </td>
+          <td class="text-end">{{ r.cost || 0 }}</td>
+        </tr>
+        <tr *ngIf="requirements().length > 0">
+          <td class="fw-bold">Requirements Total</td>
+          <td class="text-end fw-bold">{{ getRequirementTotal() }}</td>
+        </tr>
+
+        <!-- Extra costs -->
+        <tr *ngIf="booking.decorationCost > 0">
+          <td>Decoration Cost</td>
+          <td class="text-end">{{ booking.decorationCost }}</td>
+        </tr>
+        <tr *ngIf="booking.otherCost > 0">
+          <td>Other Cost</td>
+          <td class="text-end">{{ booking.otherCost }}</td>
+        </tr>
+
+        <!-- Totals -->
+        <tr class="table-dark">
+          <td class="fw-bold fs-5">Grand Total</td>
+          <td class="text-end fw-bold fs-5">
+            ৳ {{ getGrandTotal() }}
+          </td>
+        </tr>
+        <tr class="table-success">
+          <td>Advance Paid</td>
+          <td class="text-end fw-bold text-success">
+            ৳ {{ booking.paid || 0 }}
+          </td>
+        </tr>
+        <tr [ngClass]="getRemaining() > 0 ? 'table-danger' : 'table-success'">
+          <td class="fw-bold">Remaining Balance</td>
+          <td class="text-end fw-bold">
+            ৳ {{ getRemaining() }}
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <div class="text-center mt-4 pt-3 border-top">
+      <p class="text-muted mb-0">
+        Thank you for choosing EMS Event Management
+      </p>
+    </div>
+
+  </div>
+</div>

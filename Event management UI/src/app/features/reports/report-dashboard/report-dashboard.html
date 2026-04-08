@@ -1,0 +1,113 @@
+<div class="container-fluid mt-4 pb-5">
+
+  <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+    <div>
+      <h3 class="fw-bold text-dark mb-1">Business Analytics</h3>
+      <p class="text-muted smaller mb-0">Live financial performance and operational metrics dashboard.</p>
+    </div>
+    <button class="ems-btn ems-btn-outline" 
+            (click)="loadData()" [disabled]="loading()">
+      <i class="fas" [ngClass]="loading() ? 'fa-spinner fa-spin' : 'fa-sync-alt'"></i> 
+      Refresh Report
+    </button>
+  </div>
+
+  <div *ngIf="loading()" class="text-center py-5">
+    <div class="spinner-border text-primary mb-3" role="status"></div>
+    <p class="text-muted smaller fw-bold tracking-wider">CALCULATING REAL-TIME ANALYTICS...</p>
+  </div>
+
+  <div *ngIf="!loading()">
+    <!-- INSIGHT CARDS -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="ems-card border-start-success h-100 py-3">
+          <p class="text-muted smaller fw-bold text-uppercase mb-1 tracking-wider">Total Revenue</p>
+          <h2 class="fw-bold text-dark mb-0 ls-1">৳{{ totalRevenue() | number }}</h2>
+          <div class="smaller text-success mt-1 fw-bold"><i class="fas fa-arrow-up me-1"></i>Gross Income</div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="ems-card border-start-danger h-100 py-3">
+          <p class="text-muted smaller fw-bold text-uppercase mb-1 tracking-wider">Total Expenses</p>
+          <h2 class="fw-bold text-dark mb-0 ls-1">৳{{ totalPurchase() | number }}</h2>
+          <div class="smaller text-danger mt-1 fw-bold"><i class="fas fa-arrow-down me-1"></i>Operational Cost</div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="ems-card border-start-primary h-100 py-3">
+          <p class="text-muted smaller fw-bold text-uppercase mb-1 tracking-wider">Net Profit</p>
+          <h2 class="fw-bold mb-0 ls-1" [ngClass]="netProfit() >= 0 ? 'text-primary' : 'text-danger'">
+            ৳{{ netProfit() | number }}
+          </h2>
+          <div class="smaller mt-1 fw-bold" [ngClass]="netProfit() >= 0 ? 'text-primary' : 'text-danger'">
+            <i class="fas me-1" [ngClass]="netProfit() >= 0 ? 'fa-coins' : 'fa-exclamation-circle'"></i>
+            Profit Margin
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="ems-card border-start-warning h-100 py-3">
+          <p class="text-muted smaller fw-bold text-uppercase mb-1 tracking-wider">Payments Collected</p>
+          <h2 class="fw-bold text-dark mb-0 ls-1">৳{{ totalPayments() | number }}</h2>
+          <div class="smaller text-warning mt-1 fw-bold"><i class="fas fa-check-double me-1"></i>Liquidity</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- REVENUE TRENDS -->
+      <div class="col-md-6">
+        <div class="ems-card p-0 overflow-hidden">
+          <div class="bg-light px-4 py-3 border-bottom">
+            <h6 class="mb-0 fw-bold text-dark"><i class="fas fa-chart-line text-success me-2"></i>Income Distribution</h6>
+          </div>
+          <div class="p-4">
+            <div *ngFor="let m of monthlyData().revenue" class="mb-4">
+              <div class="d-flex justify-content-between smaller mb-2">
+                <span class="fw-bold text-dark">{{ m[0] }}</span>
+                <span class="text-muted fw-bold">৳{{ m[1] | number }}</span>
+              </div>
+              <div class="progress rounded-pill shadow-sm" style="height: 10px; background-color: #f1f5f9;">
+                <div class="progress-bar bg-success rounded-pill"
+                     [style.width.%]="(m[1] / (getMaxValue(monthlyData().revenue) || 1)) * 100">
+                </div>
+              </div>
+            </div>
+            <div *ngIf="monthlyData().revenue.length === 0" class="text-center py-4 text-muted small italic">
+              No revenue records for this period.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXPENDITURE TRENDS -->
+      <div class="col-md-6">
+        <div class="ems-card p-0 overflow-hidden">
+          <div class="bg-light px-4 py-3 border-bottom">
+            <h6 class="mb-0 fw-bold text-dark"><i class="fas fa-shopping-cart text-danger me-2"></i>Cost Analysis</h6>
+          </div>
+          <div class="p-4">
+            <div *ngFor="let p of monthlyData().purchase" class="mb-4">
+              <div class="d-flex justify-content-between smaller mb-2">
+                <span class="fw-bold text-dark">{{ p[0] }}</span>
+                <span class="text-muted fw-bold">৳{{ p[1] | number }}</span>
+              </div>
+              <div class="progress rounded-pill shadow-sm" style="height: 10px; background-color: #f1f5f9;">
+                <div class="progress-bar bg-danger rounded-pill"
+                     [style.width.%]="(p[1] / (getMaxValue(monthlyData().purchase) || 1)) * 100">
+                </div>
+              </div>
+            </div>
+            <div *ngIf="monthlyData().purchase.length === 0" class="text-center py-4 text-muted small italic">
+              No expenditure records found.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

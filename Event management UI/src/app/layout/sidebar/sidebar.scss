@@ -1,0 +1,74 @@
+/* Sidebar Container */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Logo */
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  letter-spacing: 1px;
+}
+
+/* Menu List */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+
+/* Menu Items */
+.sidebar li {
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+/* Hover Effect */
+.sidebar li:hover {
+  background: #1e293b;
+  transform: translateX(5px);
+}
+
+/* Active Route */
+.active {
+  background: #2563eb;
+  font-weight: 600;
+}
+
+/* Logout Button */
+.logout {
+  margin-top: 20px;
+  background: #ef4444;
+  text-align: center;
+}
+
+.logout:hover {
+  background: #dc2626;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar li {
+    font-size: 13px;
+  }
+}

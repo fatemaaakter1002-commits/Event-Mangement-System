@@ -1,0 +1,134 @@
+<div *ngIf="loading()" class="text-center mt-5">
+  <div class="spinner-border text-primary"></div>
+</div>
+
+<div class="container mt-4" *ngIf="!loading() && payment()">
+
+
+
+  <!-- TOP BUTTONS -->
+  <div class="d-flex justify-content-between mb-3 no-print">
+    <button onclick="history.back()" class="btn btn-outline-secondary">← Back</button>
+    <div class="d-flex gap-2">
+      <button class="btn btn-success" (click)="savePdf()">💾 Save as PDF</button>
+      <button class="btn btn-danger" (click)="print()">🖨️ Print Receipt</button>
+    </div>
+  </div>
+
+  <!-- RECEIPT CARD -->
+  <div class="card shadow p-4 receipt-card" style="max-width: 620px; margin: auto;">
+
+    <!-- HEADER -->
+    <div class="text-center mb-3">
+      <h2 class="fw-bold text-primary">EMS Event Management</h2>
+      <p class="text-muted mb-0">Official Payment Receipt</p>
+      <h6 class="badge bg-dark mt-1">#RCP-{{ payment().id }}</h6>
+    </div>
+
+    <hr>
+
+    <!-- BOOKING INFO -->
+    <h6 class="text-uppercase text-muted mb-2">Booking Information</h6>
+    <table class="table table-borderless table-sm mb-0">
+      <tr>
+        <td width="45%"><strong>Client Name</strong></td>
+        <td>{{ payment().booking?.clientName }}</td>
+      </tr>
+      <tr>
+        <td><strong>Event</strong></td>
+        <td>{{ payment().booking?.event }}</td>
+      </tr>
+      <tr>
+        <td><strong>Venue</strong></td>
+        <td>{{ payment().booking?.venue }}</td>
+      </tr>
+      <tr>
+        <td><strong>Event Date</strong></td>
+        <td>{{ payment().booking?.date }}</td>
+      </tr>
+    </table>
+
+    <hr>
+
+    <!-- PAYMENT INFO -->
+    <h6 class="text-uppercase text-muted mb-2">Payment Details</h6>
+    <table class="table table-borderless table-sm mb-0">
+      <tr>
+        <td width="45%"><strong>Payment Type</strong></td>
+        <td><span class="badge bg-info">{{ payment().paymentType }}</span></td>
+      </tr>
+      <tr>
+        <td><strong>Payment Method</strong></td>
+        <td><span class="badge bg-primary">{{ payment().paymentMethod }}</span></td>
+      </tr>
+      <tr *ngIf="needsAccountNumber() && payment().accountNumber">
+        <td>
+          <strong>
+            {{ payment().paymentMethod === 'Bank Transfer' ? 'Account Number' : payment().paymentMethod + ' Number' }}
+          </strong>
+        </td>
+        <td>{{ payment().accountNumber }}</td>
+      </tr>
+      <tr *ngIf="needsBankName() && payment().bankName">
+        <td><strong>Bank Name</strong></td>
+        <td>{{ payment().bankName }}</td>
+      </tr>
+      <tr>
+        <td><strong>Payment Date</strong></td>
+        <td>{{ payment().paymentDate }}</td>
+      </tr>
+      <tr *ngIf="payment().note">
+        <td><strong>Note</strong></td>
+        <td>{{ payment().note }}</td>
+      </tr>
+    </table>
+
+    <hr>
+
+    <!-- AMOUNT SUMMARY -->
+    <h6 class="text-uppercase text-muted mb-2">Amount Summary</h6>
+    <table class="table table-sm mb-0">
+      <tr>
+        <td width="55%">Booking Total</td>
+        <td class="text-end fw-bold">৳ {{ payment().booking?.total }}</td>
+      </tr>
+      <tr>
+        <td>Total Advance Paid (before this)</td>
+        <td class="text-end text-success">
+          ৳ {{ (payment().booking?.paid || 0) - (payment().amount || 0) }}
+        </td>
+      </tr>
+      <tr class="table-success">
+        <td><strong>This Payment</strong></td>
+        <td class="text-end fw-bold text-success fs-5">৳ {{ payment().amount }}</td>
+      </tr>
+      <tr [ngClass]="payment().booking?.remaining > 0 ? 'table-warning' : 'table-success'">
+        <td>
+          <strong>
+            {{ payment().booking?.remaining > 0 ? 'Remaining Due' : '✅ Fully Paid' }}
+          </strong>
+        </td>
+        <td class="text-end fw-bold"
+            [ngClass]="payment().booking?.remaining > 0 ? 'text-danger' : 'text-success'">
+          ৳ {{ payment().booking?.remaining }}
+        </td>
+      </tr>
+    </table>
+
+    <!-- FULLY PAID BADGE -->
+    <div *ngIf="payment().booking?.remaining === 0" class="text-center mt-3">
+      <span class="badge bg-success fs-6 px-4 py-2">
+        ✅ Payment Complete — Booking Confirmed
+      </span>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="text-center mt-4 border-top pt-3">
+      <p class="text-muted mb-0">Thank you for your payment!</p>
+      <small class="text-muted">
+        Generated on {{ today | date:'dd MMM yyyy, hh:mm a' }}
+      </small>
+    </div>
+
+  </div>
+</div>

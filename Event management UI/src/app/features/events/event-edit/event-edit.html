@@ -1,0 +1,98 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Edit Event</h3>
+    <a routerLink="/events" class="btn btn-outline-secondary">← Back</a>
+  </div>
+
+  <div class="card shadow p-4 mb-4">
+    <h5 class="mb-3 text-primary">Basic Information</h5>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label>Event Title *</label>
+        <input class="form-control" [(ngModel)]="event.eventTitle">
+      </div>
+      <div class="col-md-6">
+        <label>Event Type *</label>
+        <select class="form-select" [(ngModel)]="event.eventType">
+          <option>Wedding</option>
+          <option>Birthday</option>
+          <option>Corporate</option>
+          <option>Seminar</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label>Event Date *</label>
+        <input type="date" class="form-control" [(ngModel)]="event.eventDate">
+      </div>
+      <div class="col-md-3">
+        <label>Start Time</label>
+        <input type="time" class="form-control" [(ngModel)]="event.startTime">
+      </div>
+      <div class="col-md-3">
+        <label>End Time</label>
+        <input type="time" class="form-control" [(ngModel)]="event.endTime">
+      </div>
+      <div class="col-md-6">
+        <label>Venue *</label>
+        <select class="form-select" [(ngModel)]="selectedVenueId">
+          <option [ngValue]="null">Select Venue</option>
+          <option *ngFor="let v of venues" [ngValue]="v.id">
+            {{ v.name }} - {{ v.location }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label>Status</label>
+        <select class="form-select" [(ngModel)]="event.status">
+          <option>Planned</option>
+          <option>Confirmed</option>
+          <option>Ongoing</option>
+          <option>Completed</option>
+          <option>Cancelled</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow p-4 mb-4">
+    <h5 class="mb-3 text-primary">Finance</h5>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label>Budget</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="event.budget"
+               (input)="calculateRemaining()">
+      </div>
+      <div class="col-md-4">
+        <label>Advance</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="event.advance"
+               (input)="calculateRemaining()">
+      </div>
+      <div class="col-md-4">
+        <label>Remaining</label>
+        <input class="form-control" [value]="event.remaining" disabled>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow p-4 mb-4">
+    <h5 class="mb-3 text-primary">Additional Info</h5>
+    <div class="row g-3">
+      <div class="col-12">
+        <label>Notes</label>
+        <textarea class="form-control" rows="3"
+                  [(ngModel)]="event.notes"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+
+  <div class="d-flex justify-content-end gap-3 mt-4 mb-5">
+    <a routerLink="/events" class="btn btn-outline-secondary">Cancel</a>
+    <button class="btn btn-primary px-4" (click)="updateEvent()">
+      Update Event
+    </button>
+  </div>
+</div>

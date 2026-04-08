@@ -1,0 +1,203 @@
+<div class="container-fluid mt-4 pb-5">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h3 class="fw-bold text-dark mb-1">Create Reservation</h3>
+      <p class="text-muted smaller mb-0">Book venues and catering for clients.</p>
+    </div>
+    <a routerLink="/bookings" class="ems-btn ems-btn-outline shadow-sm">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+  </div>
+
+  <div class="ems-card">
+    <!-- BASIC INFO -->
+    <h5 class="text-primary fw-bold smaller text-uppercase tracking-wider mb-3"><i class="fas fa-info-circle me-2"></i>Primary Details</h5>
+    <div class="row g-2 mb-4">
+      <div class="col-md-4 ems-form-group">
+        <label class="ems-form-label">Client Name *</label>
+        <input class="ems-form-input" [(ngModel)]="booking.clientName" placeholder="Client identity">
+      </div>
+
+      <div class="col-md-4 ems-form-group">
+        <label class="ems-form-label">Event Category *</label>
+        <select class="ems-form-select" [(ngModel)]="booking.event" (change)="onEventChange()">
+          <option value="">Select Category</option>
+          <option *ngFor="let e of events" [value]="e.eventTitle">{{ e.eventTitle }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-4 ems-form-group">
+        <label class="ems-form-label">Venue Location *</label>
+        <select class="ems-form-select" [(ngModel)]="booking.venue" (change)="onVenueChange()">
+          <option value="">Select Location</option>
+          <option *ngFor="let v of venues" [value]="v.name">{{ v.name }} (৳{{ v.price }})</option>
+        </select>
+      </div>
+
+      <div class="col-md-4 ems-form-group mt-2">
+        <label class="ems-form-label">Booking Date *</label>
+        <input type="date" class="ems-form-input" [(ngModel)]="booking.date" (change)="checkAvailability()">
+      </div>
+
+      <div class="col-md-4 ems-form-group mt-2">
+        <label class="ems-form-label">Start Time *</label>
+        <input type="time" class="ems-form-input" [(ngModel)]="booking.startTime" (change)="checkAvailability()">
+      </div>
+
+      <div class="col-md-4 ems-form-group mt-2">
+        <label class="ems-form-label">End Time *</label>
+        <input type="time" class="ems-form-input" [(ngModel)]="booking.endTime" (change)="checkAvailability()">
+      </div>
+
+      <div class="col-md-4 ems-form-group mt-2">
+        <label class="ems-form-label">Expected Guests *</label>
+        <input type="number" class="ems-form-input" [(ngModel)]="booking.guests" (input)="calculateFoodCost()">
+      </div>
+
+      <div class="col-md-4 ems-form-group mt-2">
+        <label class="ems-form-label">Contact Number *</label>
+        <input class="ems-form-input" [(ngModel)]="booking.bookingFromNumber" placeholder="Mobile number">
+      </div>
+
+      <div class="col-md-4 ems-form-group mt-2">
+        <label class="ems-form-label">Booking Channel *</label>
+        <select class="ems-form-select" [(ngModel)]="booking.bookingType">
+          <option value="Online">Online / Digital</option>
+          <option value="Offline">Offline / Walk-in</option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="my-4 opacity-10">
+
+    <!-- REQUIREMENTS SELECTION -->
+    <h5 class="text-primary fw-bold smaller text-uppercase tracking-wider mb-3"><i class="fas fa-layers-group me-2"></i>Resource Requirements</h5>
+    <div class="row g-2">
+      <div class="col-md-12 ems-form-group">
+        <label class="ems-form-label">Add Logistics (Multi-select enabled)</label>
+        <select multiple class="ems-form-select" style="height: 100px;" (change)="onRequirementSelect($event)">
+          <option *ngFor="let r of allRequirements" [value]="r.requirementId">
+            {{ r.name }} — ৳{{ r.cost }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Selected Requirements Table -->
+    <div *ngIf="booking.requirements?.length > 0" class="mt-2 mb-4">
+      <div class="ems-table-container">
+        <table class="ems-table table-sm smaller">
+          <thead>
+            <tr>
+              <th class="ps-3 py-2">Requirement</th>
+              <th class="py-2">Unit</th>
+              <th class="py-2">Cost</th>
+              <th class="text-end pe-3 py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of booking.requirements; let i = index">
+              <td class="ps-3 py-2">{{ r.name }}</td>
+              <td class="py-2">{{ r.unit }}</td>
+              <td class="py-2 fw-bold text-dark">৳ {{ r.cost }}</td>
+              <td class="text-end pe-3 py-2">
+                <button class="btn btn-sm text-danger p-0" (click)="removeRequirement(i)"><i class="fas fa-times-circle"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <hr class="my-4 opacity-10">
+
+    <!-- CATERING SECTION -->
+    <h5 class="text-primary fw-bold smaller text-uppercase tracking-wider mb-3"><i class="fas fa-utensils me-2"></i>Menu Architecture</h5>
+    
+    <div class="row g-2">
+      <div *ngFor="let cat of ['Starter', 'Main Course', 'Drinks', 'Dessert']" class="col-md-6 mb-2">
+        <div class="p-2 border rounded bg-light" style="min-height: 80px;">
+          <label class="smaller fw-bold text-muted text-uppercase mb-2 d-block">{{ cat }}s</label>
+          <div class="d-flex flex-wrap gap-1">
+            <button *ngFor="let item of getByCategory(cat)" type="button" 
+                    [class]="isItemSelected(item, cat) ? 'ems-btn-primary' : 'ems-btn-outline'"
+                    class="ems-btn py-1 px-2 smaller"
+                    (click)="toggleCateringItem(item, cat)">
+              {{ item.name }} (৳{{ item.price }})
+            </button>
+            <div *ngIf="getByCategory(cat).length === 0" class="smaller text-muted italic">Unavailable</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-4 opacity-10">
+
+    <!-- FINANCIALS -->
+    <h5 class="text-primary fw-bold smaller text-uppercase tracking-wider mb-3"><i class="fas fa-wallet me-2"></i>Financial Settlement</h5>
+    <div class="row g-2">
+      <div class="col-md-3 ems-form-group">
+        <label class="ems-form-label">Venue (৳)</label>
+        <input class="ems-form-input bg-light" [value]="booking.venueCost" disabled>
+      </div>
+      <div class="col-md-3 ems-form-group">
+        <label class="ems-form-label">Food (৳)</label>
+        <input class="ems-form-input bg-light" [value]="booking.foodCost" disabled>
+      </div>
+      <div class="col-md-3 ems-form-group">
+        <label class="ems-form-label">Decoration (৳)</label>
+        <input type="number" class="ems-form-input" [(ngModel)]="booking.decorationCost" (input)="calculateTotal()">
+      </div>
+      <div class="col-md-3 ems-form-group">
+        <label class="ems-form-label">Total Bill (৳)</label>
+        <input class="ems-form-input fw-bold border-primary text-primary" [value]="booking.total" disabled>
+      </div>
+
+      <div class="col-md-4 ems-form-group mt-2">
+        <label class="ems-form-label">Advance Recovery (৳)</label>
+        <input type="number" class="ems-form-input border-success" [(ngModel)]="booking.paid" (input)="calculateRemaining()">
+      </div>
+      <div class="col-md-4 ems-form-group mt-2">
+        <label class="ems-form-label">Remaining Balance (৳)</label>
+        <input class="ems-form-input text-danger fw-bold" [value]="booking.remaining" disabled>
+      </div>
+      <div class="col-md-4 ems-form-group mt-2">
+        <label class="ems-form-label">Payment Method</label>
+        <select class="ems-form-select" [(ngModel)]="booking.paymentMethod">
+          <option value="Cash">Cash Deposit</option>
+          <option value="Bkash">bKash Personal/Merchant</option>
+          <option value="Nagad">Nagad Wallet</option>
+          <option value="Bank">Direct Bank Transfer</option>
+        </select>
+      </div>
+
+      <!-- Bank Details (Conditional) -->
+      <div class="col-md-6 ems-form-group mt-2" *ngIf="booking.paymentMethod === 'Bank'">
+        <label class="ems-form-label">Bank Branch / Name</label>
+        <input class="ems-form-input" [(ngModel)]="booking.bankName">
+      </div>
+      <div class="col-md-6 ems-form-group mt-2" *ngIf="booking.paymentMethod === 'Bank'">
+        <label class="ems-form-label">Account Identification</label>
+        <input class="ems-form-input" [(ngModel)]="booking.bankAccountNumber">
+      </div>
+    </div>
+
+    <!-- Availability Alert -->
+    <div *ngIf="availabilityMessage" class="alert alert-warning mt-3 smaller py-2 h6 mb-0">
+      <i class="fas fa-exclamation-triangle me-1"></i> {{ availabilityMessage }}
+    </div>
+
+    <!-- Actions -->
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3 smaller py-2 h6 mb-0">
+      <i class="fas fa-exclamation-circle me-1"></i> {{ errorMessage }}
+    </div>
+
+    <div class="d-flex justify-content-end mt-4 pt-3 border-top">
+      <button class="ems-btn ems-btn-primary px-5 shadow shadow-primary" (click)="saveBooking()" [disabled]="!isAvailable || checkingAvailability">
+        <i class="fas fa-check-circle me-2"></i> Finalize Booking & Generate Invoice
+      </button>
+    </div>
+
+  </div> <!-- End Card -->
+</div> <!-- End Container -->

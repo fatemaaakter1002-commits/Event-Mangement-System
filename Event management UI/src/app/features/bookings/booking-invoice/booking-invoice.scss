@@ -1,0 +1,39 @@
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  app-sidebar,
+  app-navbar,
+  app-header,
+  nav,
+  .sidebar,
+  .sidenav,
+  mat-sidenav,
+  mat-drawer,
+  mat-toolbar {
+    display: none !important;
+  }
+
+  mat-sidenav-content,
+  .main-content,
+  .content-wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+}

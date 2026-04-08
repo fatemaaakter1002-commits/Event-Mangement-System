@@ -1,0 +1,151 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Add Purchase</h3>
+    <a routerLink="/purchases" class="btn btn-outline-secondary">← Back</a>
+  </div>
+
+  <div class="card shadow p-4">
+
+    <!-- SUPPLIER -->
+    <h5 class="text-primary mb-3">① Select Supplier</h5>
+    <div class="row g-3">
+      <div class="col-md-12">
+        <label>Supplier *</label>
+        <select class="form-select" [(ngModel)]="selectedSupplierId">
+          <option value="">— Select Supplier —</option>
+          <option *ngFor="let s of suppliers" [value]="s.id">
+            {{ s.name }} | {{ s.type }} | {{ s.phone }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <hr class="my-4">
+
+    <!-- ITEM DETAILS -->
+    <h5 class="text-primary mb-3">② Item Details</h5>
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label>Item Name *</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="purchase.itemName"
+               placeholder="e.g. Plastic Chairs">
+      </div>
+
+      <div class="col-md-6">
+        <label>Category *</label>
+        <select class="form-select" [(ngModel)]="purchase.category">
+          <option value="">Select Category</option>
+          <option>Food</option>
+          <option>Decoration</option>
+          <option>Furniture</option>
+          <option>Sound & Lighting</option>
+          <option>Equipment</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <label>Quantity *</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="purchase.quantity"
+               (input)="calculateTotal()" min="1">
+      </div>
+
+      <div class="col-md-4">
+        <label>Unit Price (৳) *</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="purchase.unitPrice"
+               (input)="calculateTotal()" min="0">
+      </div>
+
+      <div class="col-md-4">
+        <label>Total Amount (৳)</label>
+        <input type="number" class="form-control bg-light fw-bold"
+               [value]="purchase.totalAmount" disabled>
+      </div>
+
+      <div class="col-md-6">
+        <label>Purchase Date *</label>
+        <input type="date" class="form-control"
+               [(ngModel)]="purchase.purchaseDate">
+      </div>
+
+      <div class="col-md-6">
+        <label>Delivery Status</label>
+        <select class="form-select" [(ngModel)]="purchase.status">
+          <option>Received</option>
+          <option>Pending</option>
+          <option>Cancelled</option>
+        </select>
+      </div>
+
+      <div class="col-md-12">
+        <label>Note</label>
+        <textarea class="form-control" rows="2"
+                  [(ngModel)]="purchase.note"
+                  placeholder="Optional note..."></textarea>
+      </div>
+
+    </div>
+
+    <hr class="my-4">
+
+    <!-- PAYMENT — Full Payment Required -->
+    <h5 class="text-primary mb-1">③ Payment</h5>
+    <p class="text-muted small mb-3">
+      ⚠ Full payment required at the time of purchase
+    </p>
+
+    <div class="row g-3">
+
+      <div class="col-md-12">
+        <div class="alert alert-success d-flex justify-content-between">
+          <strong>Total Payable Amount:</strong>
+          <strong class="fs-5">৳ {{ purchase.totalAmount }}</strong>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label>Payment Method *</label>
+        <select class="form-select" [(ngModel)]="purchase.paymentMethod">
+          <option>Cash</option>
+          <option>bKash</option>
+          <option>Nagad</option>
+          <option>Bank Transfer</option>
+        </select>
+      </div>
+
+      <div class="col-md-6" *ngIf="needsAccountNumber()">
+        <label>
+          {{ purchase.paymentMethod === 'Bank Transfer'
+             ? 'Account Number'
+             : purchase.paymentMethod + ' Number' }} *
+        </label>
+        <input type="text" class="form-control"
+               [(ngModel)]="purchase.accountNumber"
+               [placeholder]="'Enter ' + purchase.paymentMethod + ' number'">
+      </div>
+
+      <div class="col-md-6" *ngIf="needsBankName()">
+        <label>Bank Name *</label>
+        <input type="text" class="form-control"
+               [(ngModel)]="purchase.bankName"
+               placeholder="e.g. Dutch Bangla Bank">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <div class="text-end mt-4 mb-5">
+    <button class="btn btn-success btn-lg" (click)="savePurchase()">
+      💾 Save & Generate Invoice
+    </button>
+  </div>
+</div>

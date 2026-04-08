@@ -1,0 +1,63 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between mb-4">
+    <h3>Supplier Payment</h3>
+    <a routerLink="/supplier-payments"
+       class="btn btn-outline-secondary">
+      ← Back
+    </a>
+  </div>
+
+  <div class="card shadow p-4">
+
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label>Supplier *</label>
+        <select class="form-select"
+                [(ngModel)]="payment.supplier">
+          <option value="">Select Supplier</option>
+          <option *ngFor="let s of suppliers">
+            {{ s.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label>Amount *</label>
+        <input type="number"
+               class="form-control"
+               [(ngModel)]="payment.amount">
+      </div>
+
+      <div class="col-md-6">
+        <label>Date</label>
+        <input type="date"
+               class="form-control"
+               [(ngModel)]="payment.date">
+      </div>
+
+      <div class="col-md-6">
+        <label>Note</label>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="payment.note">
+      </div>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="errorMessage"
+       class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <div class="text-end mt-4">
+    <button class="btn btn-success"
+            (click)="savePayment()">
+      Save Payment
+    </button>
+  </div>
+
+</div>
